@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 {% block title %}rsdash — Feed{% endblock %}
 {% block content %}
-<h1>Activity Feed — {{ rsn }}</h1>
+<h1>📜 Adventurer's Log — {{ rsn }}</h1>
 <div class="filter-bar">
     <a href="/feed?filter=all" class="{{ 'active' if filter == 'all' }}">All</a>
-    <a href="/feed?filter=drop" class="{{ 'active' if filter == 'drop' }}">Drops</a>
-    <a href="/feed?filter=boss_kill" class="{{ 'active' if filter == 'boss_kill' }}">Boss kills</a>
-    <a href="/feed?filter=quest" class="{{ 'active' if filter == 'quest' }}">Quests</a>
-    <a href="/feed?filter=xp_milestone" class="{{ 'active' if filter == 'xp_milestone' }}">XP milestones</a>
-    <a href="/feed?filter=other" class="{{ 'active' if filter == 'other' }}">Other</a>
+    <a href="/feed?filter=drop" class="{{ 'active' if filter == 'drop' }}">💰 Drops</a>
+    <a href="/feed?filter=boss_kill" class="{{ 'active' if filter == 'boss_kill' }}">⚔️ Boss kills</a>
+    <a href="/feed?filter=quest" class="{{ 'active' if filter == 'quest' }}">📯 Quests</a>
+    <a href="/feed?filter=xp_milestone" class="{{ 'active' if filter == 'xp_milestone' }}">📈 XP milestones</a>
+    <a href="/feed?filter=other" class="{{ 'active' if filter == 'other' }}">📝 Other</a>
 </div>
 
 {% if rows %}
 <ul class="feed-list">
     {% for r in rows %}
-    <li><span class="tag tag-{{ r.event_type }}">{{ r.event_type.replace('_', ' ') }}</span> {{ r.text }} <span class="muted">{{ r.occurred_at }}</span></li>
+    <li><span class="tag tag-{{ r.event_type }}">{{ feed_icon(r.event_type) }} {{ r.event_type.replace('_', ' ') }}</span> {{ r.text }} <span class="muted">{{ r.occurred_at }}</span></li>
     {% endfor %}
 </ul>
 {% else %}

@@ -4,16 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}rsdash{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <nav class="topnav">
-        <a href="/" class="brand">rsdash</a>
-        <a href="/xp">XP</a>
-        <a href="/kc">Bosses</a>
-        <a href="/weekly">Weeklies</a>
-        <a href="/goals">Goals</a>
-        <a href="/feed">Feed</a>
+        <a href="/" class="brand">⚔ rsdash ⚔</a>
+        <span class="nav-links">
+            <a href="/xp">🏆 XP</a>
+            <span class="sep">᛫</span>
+            <a href="/kc">💀 Bosses</a>
+            <span class="sep">᛫</span>
+            <a href="/weekly">📅 Weeklies</a>
+            <span class="sep">᛫</span>
+            <a href="/goals">🎯 Goals</a>
+            <span class="sep">᛫</span>
+            <a href="/feed">📜 Feed</a>
+        </span>
     </nav>
     <main>
         {% block content %}{% endblock %}

@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request
 
 from app import config
 from app.db import get_account_id, get_conn
+from app.icons import activity_icon, feed_icon, skill_icon
 from app.templating import templates
 from app.weekbounds import current_week_start
 
@@ -85,6 +86,7 @@ def home(request: Request):
             "open_goals": open_goals,
             "weekly_summary": weekly_summary,
             "recent_feed": recent_feed,
+            "feed_icon": feed_icon,
         },
     )
 
@@ -98,7 +100,7 @@ def xp_page(request: Request):
     finally:
         conn.close()
     return templates.TemplateResponse(
-        request, "xp.html", {"rsn": config.RSN_RS3, "rows": rows}
+        request, "xp.html", {"rsn": config.RSN_RS3, "rows": rows, "skill_icon": skill_icon}
     )
 
 
@@ -111,5 +113,5 @@ def kc_page(request: Request):
     finally:
         conn.close()
     return templates.TemplateResponse(
-        request, "kc.html", {"rsn": config.RSN_RS3, "rows": rows}
+        request, "kc.html", {"rsn": config.RSN_RS3, "rows": rows, "activity_icon": activity_icon}
     )

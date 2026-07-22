@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}rsdash — Home{% endblock %}
 {% block content %}
-<h1>{{ rsn or "No RSN configured" }}</h1>
+<h1>🐉 {{ rsn or "No RSN configured" }}</h1>
 
 {% if not rsn %}
 <p class="empty">Set <code>RSN_RS3</code> in the environment to start tracking.</p>
@@ -9,21 +9,21 @@
 
 <div class="cards">
     <div class="card">
-        <div class="card-label">Total Level</div>
+        <div class="card-label">🏆 Total Level</div>
         <div class="card-value">{{ overall.level if overall else "—" }}</div>
     </div>
     <div class="card">
-        <div class="card-label">Total XP</div>
+        <div class="card-label">🌟 Total XP</div>
         <div class="card-value">{{ "{:,}".format(overall.xp) if overall else "—" }}</div>
     </div>
     <div class="card">
-        <div class="card-label">Open Goals</div>
+        <div class="card-label">🎯 Open Goals</div>
         <div class="card-value">{{ open_goals }}</div>
     </div>
 </div>
 {% if last_synced %}<p class="muted">Last synced: {{ last_synced }}</p>{% else %}<p class="muted">Waiting on first sync…</p>{% endif %}
 
-<h2>This week</h2>
+<h2>📅 This week</h2>
 {% if weekly_summary %}
 <ul class="weekly-summary">
     {% for w in weekly_summary %}
@@ -34,11 +34,11 @@
 <p class="empty">No weekly tasks yet. <a href="/weekly">Add some</a>.</p>
 {% endif %}
 
-<h2>Recent activity</h2>
+<h2>📜 Recent activity</h2>
 {% if recent_feed %}
 <ul class="feed-list">
     {% for f in recent_feed %}
-    <li><span class="tag tag-{{ f.event_type }}">{{ f.event_type }}</span> {{ f.text }} <span class="muted">{{ f.occurred_at }}</span></li>
+    <li><span class="tag tag-{{ f.event_type }}">{{ feed_icon(f.event_type) }} {{ f.event_type }}</span> {{ f.text }} <span class="muted">{{ f.occurred_at }}</span></li>
     {% endfor %}
 </ul>
 {% else %}

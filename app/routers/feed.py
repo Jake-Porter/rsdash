@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request
 
 from app import config
 from app.db import get_account_id, get_conn
+from app.icons import feed_icon
 from app.templating import templates
 
 router = APIRouter()
@@ -31,5 +32,5 @@ def feed_page(request: Request, filter: str = "all"):
     return templates.TemplateResponse(
         request,
         "feed.html",
-        {"rows": rows, "filter": filter, "rsn": config.RSN_RS3},
+        {"rows": rows, "filter": filter, "rsn": config.RSN_RS3, "feed_icon": feed_icon},
     )
