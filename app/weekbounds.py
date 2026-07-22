@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 TZ = ZoneInfo("America/Denver")
@@ -15,3 +15,13 @@ def current_week_start(now: datetime | None = None) -> datetime:
     if candidate > now:
         candidate -= timedelta(days=7)
     return candidate
+
+
+def current_day_start(now: datetime | None = None) -> datetime:
+    """Most recent 00:00 UTC at or before `now` (matches RS3's daily reset)."""
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    return now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+
+def period_start(category: str, now: datetime | None = None) -> datetime:
+    return current_day_start(now) if category == "daily" else current_week_start(now)

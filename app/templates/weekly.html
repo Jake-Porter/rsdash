@@ -1,35 +1,66 @@
 {% extends "base.html" %}
-{% block title %}rsdash — Weeklies{% endblock %}
+{% block title %}rsdash — Tasks{% endblock %}
 {% block content %}
-<h1>📅 Weekly Tasks</h1>
-<p class="muted">Week resets Tuesday 6 PM Mountain Time. Current week started {{ week_start.strftime("%a %b %d, %I:%M %p") }}.</p>
+<h1>✅ Tasks</h1>
 
-{% if tasks %}
+<h2>📅 Dailies</h2>
+<p class="muted">Resets daily at midnight UTC. Current period started {{ day_start.strftime("%a %b %d, %H:%M UTC") }}.</p>
+{% if dailies %}
 <ul class="task-list">
-    {% for t in tasks %}
+    {% for t in dailies %}
     <li class="{{ 'done' if t.id in completions else '' }}">
         <form method="post" action="/weekly/{{ t.id }}/toggle" class="inline-form">
             <button type="submit" class="check-btn">{{ "✓" if t.id in completions else "○" }}</button>
         </form>
         <div class="task-body">
-            <div class="task-name">{{ t.name }}</div>
+            <div class="task-name">{{ task_icon(t.name, t.category) }} {{ t.name }}</div>
             {% if t.description %}<div class="task-desc">{{ t.description }}</div>{% endif %}
             <div class="muted small">
                 {% if last_completed[t.id] %}Last completed: {{ last_completed[t.id] }}{% else %}Never completed{% endif %}
             </div>
         </div>
-        <form method="post" action="/weekly/{{ t.id }}/delete" class="inline-form" onsubmit="return confirm('Remove this weekly task?');">
+        <form method="post" action="/weekly/{{ t.id }}/delete" class="inline-form" onsubmit="return confirm('Remove this task?');">
             <button type="submit" class="delete-btn">✕</button>
         </form>
     </li>
     {% endfor %}
 </ul>
 {% else %}
-<p class="empty">No weekly tasks yet — add your first one below.</p>
+<p class="empty">No daily tasks yet.</p>
 {% endif %}
 
-<h2>Add a weekly task</h2>
+<h2>🗓️ Weeklies</h2>
+<p class="muted">Resets Tuesday 6 PM Mountain Time. Current period started {{ week_start.strftime("%a %b %d, %I:%M %p") }}.</p>
+{% if weeklies %}
+<ul class="task-list">
+    {% for t in weeklies %}
+    <li class="{{ 'done' if t.id in completions else '' }}">
+        <form method="post" action="/weekly/{{ t.id }}/toggle" class="inline-form">
+            <button type="submit" class="check-btn">{{ "✓" if t.id in completions else "○" }}</button>
+        </form>
+        <div class="task-body">
+            <div class="task-name">{{ task_icon(t.name, t.category) }} {{ t.name }}</div>
+            {% if t.description %}<div class="task-desc">{{ t.description }}</div>{% endif %}
+            <div class="muted small">
+                {% if last_completed[t.id] %}Last completed: {{ last_completed[t.id] }}{% else %}Never completed{% endif %}
+            </div>
+        </div>
+        <form method="post" action="/weekly/{{ t.id }}/delete" class="inline-form" onsubmit="return confirm('Remove this task?');">
+            <button type="submit" class="delete-btn">✕</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="empty">No weekly tasks yet.</p>
+{% endif %}
+
+<h2>Add a task</h2>
 <form method="post" action="/weekly/add" class="stacked-form">
+    <select name="category">
+        <option value="daily">Daily</option>
+        <option value="weekly" selected>Weekly</option>
+    </select>
     <input type="text" name="name" placeholder="e.g. Vorago solo, Slayer weekly, Elite dungeon" required>
     <input type="text" name="description" placeholder="optional notes">
     <button type="submit">Add</button>

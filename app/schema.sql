@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS weekly_tasks (
     account_id INTEGER NOT NULL REFERENCES accounts(id),
     name TEXT NOT NULL,
     description TEXT,
+    category TEXT NOT NULL DEFAULT 'weekly' CHECK(category IN ('daily','weekly')),
     sort_order INTEGER NOT NULL DEFAULT 0,
     active INTEGER NOT NULL DEFAULT 1
 );
@@ -48,9 +49,9 @@ CREATE TABLE IF NOT EXISTS weekly_tasks (
 CREATE TABLE IF NOT EXISTS weekly_completions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     task_id INTEGER NOT NULL REFERENCES weekly_tasks(id),
-    week_start TEXT NOT NULL,
+    period_start TEXT NOT NULL,
     completed_at TEXT NOT NULL,
-    UNIQUE(task_id, week_start)
+    UNIQUE(task_id, period_start)
 );
 
 CREATE TABLE IF NOT EXISTS goals (

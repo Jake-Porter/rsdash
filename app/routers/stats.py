@@ -2,9 +2,9 @@ from fastapi import APIRouter, Request
 
 from app import config
 from app.db import get_account_id, get_conn
-from app.icons import activity_icon, feed_icon, skill_icon
+from app.icons import activity_icon, feed_icon, skill_icon, task_icon
 from app.templating import templates
-from app.weekbounds import current_week_start
+from app.weekbounds import current_day_start, current_week_start
 
 router = APIRouter()
 
@@ -42,7 +42,7 @@ def home(request: Request):
         account_id = get_account_id("rs3", config.RSN_RS3)
         overall = None
         open_goals = 0
-        weekly_summary = []
+        task_summary = []
         recent_feed = []
         last_synced = None
         if account_id:
@@ -54,20 +54,24 @@ def home(request: Request):
                 (account_id,),
             ).fetchone()["c"]
 
-            week_start = current_week_start().isoformat()
             tasks = conn.execute(
-                "SELECT id, name FROM weekly_tasks WHERE account_id=? AND active=1 ORDER BY sort_order, id",
+                "SELECT id, name, category FROM weekly_tasks WHERE account_id=? AND active=1 ORDER BY category DESC, sort_order, id",
                 (account_id,),
             ).fetchall()
-            done_ids = {
-                r["task_id"]
+            day_start = current_day_start().isoformat()
+            week_start = current_week_start().isoformat()
+            done_ids = set()
+            for cat, boundary in (("daily", day_start), ("weekly", week_start)):
                 for r in conn.execute(
-                    "SELECT task_id FROM weekly_completions WHERE week_start=?",
-                    (week_start,),
-                ).fetchall()
-            }
-            weekly_summary = [
-                {"name": t["name"], "done": t["id"] in done_ids} for t in tasks
+                    """SELECT wc.task_id FROM weekly_completions wc
+                       JOIN weekly_tasks wt ON wt.id = wc.task_id
+                       WHERE wt.category=? AND wc.period_start=?""",
+                    (cat, boundary),
+                ).fetchall():
+                    done_ids.add(r["task_id"])
+            task_summary = [
+                {"name": t["name"], "category": t["category"], "icon": task_icon(t["name"], t["category"]), "done": t["id"] in done_ids}
+                for t in tasks
             ]
             recent_feed = conn.execute(
                 "SELECT event_type, text, occurred_at FROM activity_feed WHERE account_id=? ORDER BY id DESC LIMIT 8",
@@ -84,7 +88,7 @@ def home(request: Request):
             "overall": overall,
             "last_synced": last_synced,
             "open_goals": open_goals,
-            "weekly_summary": weekly_summary,
+            "task_summary": task_summary,
             "recent_feed": recent_feed,
             "feed_icon": feed_icon,
         },

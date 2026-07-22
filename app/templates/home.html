@@ -23,15 +23,15 @@
 </div>
 {% if last_synced %}<p class="muted">Last synced: {{ last_synced }}</p>{% else %}<p class="muted">Waiting on first sync…</p>{% endif %}
 
-<h2>📅 This week</h2>
-{% if weekly_summary %}
+<h2>✅ Tasks</h2>
+{% if task_summary %}
 <ul class="weekly-summary">
-    {% for w in weekly_summary %}
-    <li class="{{ 'done' if w.done else 'pending' }}">{{ "✓" if w.done else "○" }} {{ w.name }}</li>
+    {% for t in task_summary %}
+    <li class="{{ 'done' if t.done else 'pending' }}">{{ "✓" if t.done else "○" }} {{ t.icon }} {{ t.name }} <span class="muted small">({{ t.category }})</span></li>
     {% endfor %}
 </ul>
 {% else %}
-<p class="empty">No weekly tasks yet. <a href="/weekly">Add some</a>.</p>
+<p class="empty">No tasks yet. <a href="/weekly">Add some</a>.</p>
 {% endif %}
 
 <h2>📜 Recent activity</h2>
