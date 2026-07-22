@@ -94,11 +94,24 @@ main { flex: 1; }
 .topnav .sep { color: var(--border-light); }
 
 .topnav .brand {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    text-decoration: none;
+}
+
+.brand-title {
     color: var(--accent);
     font-weight: 700;
     font-size: 1.3rem;
     letter-spacing: 0.03em;
-    text-decoration: none;
+}
+
+.brand-subtitle {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
 }
 
 main {
