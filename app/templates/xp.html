@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}rsdash — XP{% endblock %}
+{% block content %}
+<h1>Skills — {{ rsn }}</h1>
+{% if rows %}
+<table>
+    <thead><tr><th>Skill</th><th>Level</th><th>XP</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+        <tr class="{{ 'overall-row' if r.skill == 'Overall' }}">
+            <td>{{ r.skill }}</td>
+            <td>{{ r.level }}</td>
+            <td>{{ "{:,}".format(r.xp) }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty">No XP data yet — waiting on the first hiscores sync.</p>
+{% endif %}
+{% endblock %}

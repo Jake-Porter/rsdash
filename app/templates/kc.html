@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}rsdash — Bosses{% endblock %}
+{% block content %}
+<h1>Boss / Activity Kill Counts — {{ rsn }}</h1>
+{% if rows %}
+<table>
+    <thead><tr><th>Activity</th><th>Score / KC</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+        <tr>
+            <td>{{ r.activity }}</td>
+            <td>{{ "{:,}".format(r.score) }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty">No boss KC data yet — waiting on the first hiscores sync.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}rsdash — Goals{% endblock %}
+{% block content %}
+<h1>Goals</h1>
+
+{% if goals %}
+<ul class="goal-list">
+    {% for g in goals %}
+    <li class="goal {{ 'done' if g.status == 'done' else '' }}">
+        <div class="goal-header">
+            <form method="post" action="/goals/{{ g.id }}/toggle" class="inline-form">
+                <button type="submit" class="check-btn">{{ "✓" if g.status == "done" else "○" }}</button>
+            </form>
+            <div class="goal-title">{{ g.title }}</div>
+            <form method="post" action="/goals/{{ g.id }}/delete" class="inline-form" onsubmit="return confirm('Delete this goal?');">
+                <button type="submit" class="delete-btn">✕</button>
+            </form>
+        </div>
+        {% if g.notes %}<div class="goal-notes">{{ g.notes }}</div>{% endif %}
+
+        {% set updates = updates_by_goal[g.id] %}
+        {% if updates %}
+        <ul class="goal-updates">
+            {% for u in updates %}
+            <li><span class="muted small">{{ u.created_at }}</span> — {{ u.note }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <form method="post" action="/goals/{{ g.id }}/updates" class="inline-form update-form">
+            <input type="text" name="note" placeholder="add a progress update" required>
+            <button type="submit">Add</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="empty">No goals yet — add your first one below.</p>
+{% endif %}
+
+<h2>New goal</h2>
+<form method="post" action="/goals/add" class="stacked-form">
+    <input type="text" name="title" placeholder="e.g. Bandos tassets, 99 Fishing by Dec" required>
+    <input type="text" name="notes" placeholder="optional notes">
+    <button type="submit">Add</button>
+</form>
+{% endblock %}

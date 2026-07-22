@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}rsdash — Weeklies{% endblock %}
+{% block content %}
+<h1>Weekly Tasks</h1>
+<p class="muted">Week resets Tuesday 6 PM Mountain Time. Current week started {{ week_start.strftime("%a %b %d, %I:%M %p") }}.</p>
+
+{% if tasks %}
+<ul class="task-list">
+    {% for t in tasks %}
+    <li class="{{ 'done' if t.id in completions else '' }}">
+        <form method="post" action="/weekly/{{ t.id }}/toggle" class="inline-form">
+            <button type="submit" class="check-btn">{{ "✓" if t.id in completions else "○" }}</button>
+        </form>
+        <div class="task-body">
+            <div class="task-name">{{ t.name }}</div>
+            {% if t.description %}<div class="task-desc">{{ t.description }}</div>{% endif %}
+            <div class="muted small">
+                {% if last_completed[t.id] %}Last completed: {{ last_completed[t.id] }}{% else %}Never completed{% endif %}
+            </div>
+        </div>
+        <form method="post" action="/weekly/{{ t.id }}/delete" class="inline-form" onsubmit="return confirm('Remove this weekly task?');">
+            <button type="submit" class="delete-btn">✕</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="empty">No weekly tasks yet — add your first one below.</p>
+{% endif %}
+
+<h2>Add a weekly task</h2>
+<form method="post" action="/weekly/add" class="stacked-form">
+    <input type="text" name="name" placeholder="e.g. Vorago solo, Slayer weekly, Elite dungeon" required>
+    <input type="text" name="description" placeholder="optional notes">
+    <button type="submit">Add</button>
+</form>
+{% endblock %}

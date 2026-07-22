@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  rsdash:
+    build: .
+    container_name: rsdash-local
+    restart: unless-stopped
+    ports:
+      - "8082:8000"
+    environment:
+      - TZ=America/Denver
+      - RSN_RS3=${RSN_RS3:-}
+      - RSN_OSRS=${RSN_OSRS:-}
+      - HISCORES_POLL_MINUTES=${HISCORES_POLL_MINUTES:-30}
+      - FEED_POLL_MINUTES=${FEED_POLL_MINUTES:-15}
+    volumes:
+      - ./data:/app/data
