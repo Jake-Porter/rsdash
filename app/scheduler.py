@@ -3,9 +3,10 @@ from datetime import datetime, timezone
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from app import config
+from app import config, wiki_icons
 from app.db import get_conn, get_or_create_account
 from app.hiscores import fetch_hiscores
+from app.icons import activity_icon_candidates, skill_icon_candidates
 from app.runemetrics import (
     RuneMetricsError,
     classify_activity,
@@ -47,6 +48,18 @@ async def poll_hiscores_for(game: str, rsn: str) -> None:
         conn.commit()
     finally:
         conn.close()
+
+    try:
+        await wiki_icons.resolve(
+            "skill", {s["name"]: skill_icon_candidates(s["name"]) for s in data.get("skills", [])}
+        )
+        await wiki_icons.resolve(
+            "activity",
+            {a["name"]: activity_icon_candidates(a["name"]) for a in data.get("activities", [])},
+        )
+    except Exception:
+        log.warning("wiki icon resolution failed for %s/%s", game, rsn, exc_info=True)
+
     log.info("hiscores poll ok for %s/%s", game, rsn)
 
 

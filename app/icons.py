@@ -1,3 +1,7 @@
+from markupsafe import Markup, escape
+
+from app import wiki_icons
+
 SKILL_ICONS = {
     "Overall": "🏆",
     "Attack": "⚔️",
@@ -35,8 +39,29 @@ SKILL_ICONS = {
 
 DEFAULT_SKILL_ICON = "🔸"
 
+# Wiki file naming is a solid, verified convention for skills: "<Skill> icon highscores.png",
+# except Overall which lives under a different name.
+SKILL_ICON_OVERRIDES = {
+    "Overall": ["Stats Overall icon highscores.png"],
+    # the live hiscores API uses RS3's current skill names, but the wiki still files
+    # these two icons under the older names
+    "Hitpoints": ["Constitution icon highscores.png"],
+    "Runecraft": ["Runecrafting icon highscores.png"],
+}
 
-def skill_icon(name: str) -> str:
+
+def skill_icon_candidates(name: str) -> list[str]:
+    return SKILL_ICON_OVERRIDES.get(name, [f"{name} icon highscores.png"])
+
+
+def _img(url: str, alt: str) -> Markup:
+    return Markup(f'<img class="icon" src="{escape(url)}" alt="{escape(alt)}">')
+
+
+def skill_icon(name: str):
+    url = wiki_icons.get_cached("skill", name)
+    if url:
+        return _img(url, name)
     return SKILL_ICONS.get(name, DEFAULT_SKILL_ICON)
 
 
@@ -70,8 +95,26 @@ TASK_ICONS = {
 
 DEFAULT_TASK_ICON = {"daily": "📅", "weekly": "🗓️"}
 
+# Hand-picked, verified wiki filenames for the seeded tasks — only added where a
+# confident exact match was checked. Everything else just tries the generic pattern
+# and falls back to emoji rather than risk showing a wrong/misleading icon.
+TASK_ICON_OVERRIDES = {
+    "daily challenges": ["Daily Challenge icon.png"],
+}
 
-def task_icon(name: str, category: str = "weekly") -> str:
+
+def task_icon_candidates(name: str) -> list[str]:
+    lowered = name.lower()
+    for key, candidates in TASK_ICON_OVERRIDES.items():
+        if key in lowered:
+            return candidates
+    return [f"{name} icon.png"]
+
+
+def task_icon(name: str, category: str = "weekly"):
+    url = wiki_icons.get_cached("task", name)
+    if url:
+        return _img(url, name)
     lowered = name.lower()
     for key, icon in TASK_ICONS.items():
         if key in lowered:
@@ -79,7 +122,14 @@ def task_icon(name: str, category: str = "weekly") -> str:
     return DEFAULT_TASK_ICON.get(category, "🔸")
 
 
-def activity_icon(name: str) -> str:
+def activity_icon_candidates(name: str) -> list[str]:
+    return [f"{name} icon.png", f"{name} icon highscores.png"]
+
+
+def activity_icon(name: str):
+    url = wiki_icons.get_cached("activity", name)
+    if url:
+        return _img(url, name)
     lowered = name.lower()
     if "clue" in lowered:
         return "📜"
