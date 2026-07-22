@@ -2,7 +2,7 @@ version: "3.8"
 services:
   rsdash:
     build: .
-    container_name: rsdash-local
+    container_name: ctnr-rsdash-01
     restart: unless-stopped
     ports:
       - "8082:8000"
@@ -13,4 +13,4 @@ services:
       - HISCORES_POLL_MINUTES=${HISCORES_POLL_MINUTES:-30}
       - FEED_POLL_MINUTES=${FEED_POLL_MINUTES:-15}
     volumes:
-      - ./data:/app/data
+      - /opt/rsdash/data:/app/data
