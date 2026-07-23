@@ -98,9 +98,9 @@ DEFAULT_TASK_ICON = {"daily": "📅", "weekly": "🗓️"}
 # Hand-picked, verified wiki filenames for the seeded tasks — only added where a
 # confident exact match was checked. Everything else just tries the generic pattern
 # and falls back to emoji rather than risk showing a wrong/misleading icon.
-TASK_ICON_OVERRIDES = {
-    "daily challenges": ["Daily Challenge icon.png"],
-}
+# (Daily Challenges intentionally excluded: the real wiki icon is a round badge that
+# sits too close visually to the round toggle button next to it — the emoji reads better.)
+TASK_ICON_OVERRIDES = {}
 
 
 def task_icon_candidates(name: str) -> list[str]:
