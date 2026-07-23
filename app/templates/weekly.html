@@ -9,7 +9,7 @@
 <ul class="task-list">
     {% for t in dailies %}
     <li class="{{ 'done' if t.id in completions else '' }}">
-        <form method="post" action="/weekly/{{ t.id }}/toggle" class="inline-form">
+        <form method="post" action="/weekly/{{ t.id }}/toggle" class="inline-form ajax-form">
             <button type="submit" class="check-btn">{{ "✓" if t.id in completions else "" }}</button>
         </form>
         <div class="task-body">
@@ -35,7 +35,7 @@
 <ul class="task-list">
     {% for t in weeklies %}
     <li class="{{ 'done' if t.id in completions else '' }}">
-        <form method="post" action="/weekly/{{ t.id }}/toggle" class="inline-form">
+        <form method="post" action="/weekly/{{ t.id }}/toggle" class="inline-form ajax-form">
             <button type="submit" class="check-btn">{{ "✓" if t.id in completions else "" }}</button>
         </form>
         <div class="task-body">
