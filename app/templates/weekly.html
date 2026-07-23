@@ -10,7 +10,7 @@
     {% for t in dailies %}
     <li class="{{ 'done' if t.id in completions else '' }}">
         <form method="post" action="/weekly/{{ t.id }}/toggle" class="inline-form">
-            <button type="submit" class="check-btn">{{ "✓" if t.id in completions else "○" }}</button>
+            <button type="submit" class="check-btn">{{ "✓" if t.id in completions else "" }}</button>
         </form>
         <div class="task-body">
             <div class="task-name">{{ task_icon(t.name, t.category) }} {{ t.name }}</div>
@@ -36,7 +36,7 @@
     {% for t in weeklies %}
     <li class="{{ 'done' if t.id in completions else '' }}">
         <form method="post" action="/weekly/{{ t.id }}/toggle" class="inline-form">
-            <button type="submit" class="check-btn">{{ "✓" if t.id in completions else "○" }}</button>
+            <button type="submit" class="check-btn">{{ "✓" if t.id in completions else "" }}</button>
         </form>
         <div class="task-body">
             <div class="task-name">{{ task_icon(t.name, t.category) }} {{ t.name }}</div>
