@@ -22,7 +22,7 @@
         {% if updates %}
         <ul class="goal-updates">
             {% for u in updates %}
-            <li><span class="muted small">{{ u.created_at }}</span> — {{ u.note }}</li>
+            <li><span class="muted small">{{ u.created_at | local_dt }}</span> — {{ u.note }}</li>
             {% endfor %}
         </ul>
         {% endif %}

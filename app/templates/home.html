@@ -21,7 +21,7 @@
         <div class="card-value">{{ open_goals }}</div>
     </div>
 </div>
-{% if last_synced %}<p class="muted">Last synced: {{ last_synced }}</p>{% else %}<p class="muted">Waiting on first sync…</p>{% endif %}
+{% if last_synced %}<p class="muted">Last synced: {{ last_synced | local_dt }}</p>{% else %}<p class="muted">Waiting on first sync…</p>{% endif %}
 
 <h2>✅ Tasks</h2>
 {% if task_summary %}

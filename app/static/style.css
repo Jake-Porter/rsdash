@@ -243,6 +243,11 @@ tr:hover td { background: var(--bg-hover); }
     font-size: 1rem;
     transition: transform .12s, border-color .18s, color .18s;
 }
+.check-btn {
+    width: 1.35rem;
+    height: 1.35rem;
+    font-size: 0.75rem;
+}
 .check-btn:hover { border-color: var(--accent); color: var(--accent-hover); box-shadow: var(--shadow-glow); }
 .delete-btn:hover { border-color: var(--red); color: var(--red); }
 .check-btn:active, .delete-btn:active { transform: scale(.96); }
